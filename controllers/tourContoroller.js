@@ -11,6 +11,15 @@ exports.checkID = (req, res, next, val) => {
   next();
 };
 
+exports.chechBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price)
+    return res
+      .status(400)
+      .json({ status: 'fail', message: 'Missing name or price' });
+
+  next(); // if not it hit the next middleware
+};
+
 exports.getTour = (req, res) => {
   // if iwant to make a parameter optional ?id
   const id = req.params.id * 1;

@@ -9,7 +9,7 @@ router.param('id', tourController.checkID);
 router
   .route('/')
   .get(tourController.getAllTours)
-  .post(tourController.createTour);
+  .post(tourController.chechBody, tourController.createTour); // it go with checkbody first if it pass from it it go with createTour
 
 router
   .route('/:id')
