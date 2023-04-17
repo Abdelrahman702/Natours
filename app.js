@@ -2,7 +2,6 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 const morgan = require('morgan'); // it show the information about the request
-
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 
