@@ -17,7 +17,6 @@ mongoose // to connect with the database
   })
   .then((con) => {
     // handle the promise because the connect function return a promise
-    console.log(con.connection);
     console.log('DB connection successful');
   });
 
