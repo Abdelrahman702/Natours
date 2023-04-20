@@ -22,7 +22,42 @@ exports.getTour = async (req, res) => {
 
 exports.getAllTours = async (req, res) => {
   try {
-    const tours = await Tour.find(); // to get the all tours that are existing
+    console.log(req.query);
+
+    //BUILD QUERY
+    // 1)Filtring
+    const queryObj = { ...req.query }; //create a new obj with the same content of req.query
+    const excludeFields = ['page', 'sort', 'limit', 'fields'];
+    excludeFields.forEach((element) => {
+      delete queryObj[element];
+    });
+
+    // 2)Advance Filtring
+
+    // {  difficulty:'easy',  duration : {$gte :1}     }                this is req.query
+    // {  difficulty:'easy',  duration : {gte :'1'}     }               this is the query
+
+    let queryStr = JSON.stringify(queryObj); // convert the JSON object to string
+
+    // The regular expression used here (/\b(gte|gt|lt|lte)\b/g) is using the \b boundary
+    // matcher to match the start and end of words,
+    // and the (gte|gt|lt|lte) group to match any of the specified
+    //  strings (gte, gt, lt, or lte). The g flag at the end of
+    //  the expression means that it will match all occurrences of these strings in the input string.
+
+    queryStr = queryStr.replace(/\b(gte|gt|lt|lte)\b/g, (match) => `$${match}`);
+    console.log(JSON.parse(queryStr));
+
+    const query = Tour.find(JSON.parse(queryStr));
+
+    //EXCUTE QUERY
+    const tours = await query;
+
+    // const query = Tour.find()
+    //   .where('duration')
+    //   .equals(5)
+    //   .where('difficulty')
+    //   .equals('easy');
 
     res.status(200).json({
       status: 'success',
