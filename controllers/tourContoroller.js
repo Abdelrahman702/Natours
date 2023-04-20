@@ -46,7 +46,6 @@ exports.getAllTours = async (req, res) => {
     //  the expression means that it will match all occurrences of these strings in the input string.
 
     queryStr = queryStr.replace(/\b(gte|gt|lt|lte)\b/g, (match) => `$${match}`);
-    console.log(JSON.parse(queryStr));
 
     let query = Tour.find(JSON.parse(queryStr));
 
@@ -54,8 +53,16 @@ exports.getAllTours = async (req, res) => {
 
     if (req.query.sort) {
       const sortBy = req.query.sort.split(',').join(' ');
-      console.log(sortBy);
       query = query.sort(sortBy);
+    }
+
+    // 3) FIELD LINITING
+
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+      query = query.select(fields);
+    } else {
+      query = query.select('-__v'); // to exclude it
     }
 
     //EXCUTE QUERY

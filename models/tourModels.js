@@ -55,6 +55,7 @@ const tourSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now(),
+    select: false, // it is like a sensitive data so we won't display it for user
   },
   startDates: [Date],
 });
