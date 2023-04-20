@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 const dotenv = require('dotenv'); //used to load environment variables from a .env file into the Node.js environment.
+dotenv.config({ path: './config.env' }); //read the vaiables from the file and save it in nodejs environment variables
+
 const app = require('./app');
 const mongoose = require('mongoose');
-dotenv.config({ path: './config.env' }); //read the vaiables from the file and save it in nodejs environment variables
 
 const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
