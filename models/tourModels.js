@@ -73,19 +73,6 @@ tourSchema.virtual('duarationWeeks').get(function () {
   return this.duration / 7;
 });
 
-// DOCUMENT MIDDLEWARE :the pre middleware it run before saving .save(() and  .create() .
-//there is  another middleware (post) that runs after the save
-tourSchema.pre('save', function (next) {
-  this.slug = slugify(this.name, { lower: true });
-  next(); // it is a middleware so it must have next function or it will be stuck in here
-});
-
-//QUERY MIDDLEWARE
-tourSchema.pre('/^find/', function (next) {
-  // this reqular expression for appling this middleware fora ll find query
-  next(); // it is a middleware so it must have next function or it will be stuck in here
-});
-
 //Model of the schema
 
 const Tour = mongoose.model('Tour', tourSchema);
