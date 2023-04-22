@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 //Schema
 const tourSchema = new mongoose.Schema(
@@ -8,6 +9,8 @@ const tourSchema = new mongoose.Schema(
       requireed: [true, 'A tour must have a name'],
       unique: true,
     },
+    slug: String,
+
     duration: {
       type: Number,
       required: [true, 'A tour must have a duration'],
@@ -68,6 +71,13 @@ const tourSchema = new mongoose.Schema(
 
 tourSchema.virtual('duarationWeeks').get(function () {
   return this.duration / 7;
+});
+
+// DOCUMENT MIDDLEWARE :the pre middleware it run before saving .save(() and  .create() .
+//there is  another middleware (post) that runs after the save
+tourSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next(); // it is a middleware so it must have next function or it will be stuck in here
 });
 
 //Model of the schema
