@@ -28,4 +28,13 @@ app.use((req, res, next) => {
 app.use('/api/v1/tours', tourRouter); //use tourRouter to point to this url
 app.use('/api/v1/users', userRouter); //use userouter to point to this url
 
+// handling unhandled reoutes
+
+app.all('*', (req, res, next) => {
+  res.status(404).json({
+    status: 'fail',
+    message: `Can't find ${req.originalUrl} on the server`,
+  });
+});
+
 module.exports = app;
