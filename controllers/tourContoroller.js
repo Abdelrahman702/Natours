@@ -2,6 +2,7 @@ const { query } = require('express');
 const APIFeatures = require('./../utils/apiFeatures');
 const Tour = require('./../models/tourModels');
 const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
 // const tours = JSON.parse(
 //   // convert the string to js object
@@ -17,6 +18,9 @@ exports.alisasTopTours = (req, res, next) => {
 
 exports.getTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findById(req.params.id);
+  if (!tour) {
+    return next(new AppError('No tour found with this ID', 404));
+  }
   res.status(200).json({
     stsus: 'success',
     data: { tour },
@@ -66,6 +70,9 @@ exports.updateTour = catchAsync(async (req, res, next) => {
     new: true,
     runValidators: true,
   });
+  if (!tour) {
+    return next(new AppError('No tour found with this ID', 404));
+  }
 
   res.status(200).json({
     status: 'success',
@@ -76,7 +83,10 @@ exports.updateTour = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteTour = catchAsync(async (req, res, next) => {
-  await Tour.findByIdAndDelete(req.params.id);
+  const tour = await Tour.findByIdAndDelete(req.params.id);
+  if (!tour) {
+    return next(new AppError('No tour found with this ID', 404));
+  }
   res.status(204).json({
     status: 'success',
     data: null,
