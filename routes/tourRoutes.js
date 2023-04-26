@@ -23,6 +23,10 @@ router
   .route('/:id')
   .get(tourController.getTour)
   .patch(tourController.updateTour)
-  .delete(tourController.deleteTour);
+  .delete(
+    authController.protect,
+    authController.restrictTo,
+    tourController.deleteTour
+  );
 
 module.exports = router; // this is to allow to export the content of this file
