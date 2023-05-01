@@ -2,6 +2,8 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 const morgan = require('morgan'); // it show the information about the request
+const rateLimit = require('express-rate-limit');
+
 const globalErrorHandler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
 
@@ -15,6 +17,14 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 app.use(express.json());
+
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many requests from this IP, please try again in an hour',
+});
+
+app.use(limiter);
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
