@@ -70,7 +70,12 @@ exports.protect = catchAsync(async (req, res, next) => {
   // 2) Verification token
   //it in this form because promisify returns a new function that return a promise and it takes thess argument (token, process.env.JWT_SECRET)
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-
+  //it returns an object that contains information about the user :
+  // {
+  // id:6448c016380e3f52840a2ebf             the user id
+  // iat:23333333333333332232                create at
+  // iet:21211111111111111212                expired at
+  // }
   // 3) Check if user still exists
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
