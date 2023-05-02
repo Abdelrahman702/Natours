@@ -137,9 +137,18 @@ tourSchema.pre('save', function (next) {
 // });
 
 //QUERY MIDDLEWARE
-tourSchema.pre('/^find/', function (next) {
+tourSchema.pre(/^find/, function (next) {
   // this reqular expression for appling this middleware fora ll find query
   next(); // it is a middleware so it must have next function or it will be stuck in here
+});
+
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-passwordChangedAt -__v',
+  });
+
+  next();
 });
 
 //AGGREGATION MIDDLEWARE
