@@ -83,6 +83,31 @@ const tourSchema = new mongoose.Schema(
       select: false, // it is like a sensitive data so we won't display it for user
     },
     startDates: [Date],
+    startLocation: {
+      //GeoJSON
+      type: {
+        type: String,
+        enum: ['Point'],
+        default: 'Point',
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    Locations: [
+      {
+        //GeoJSON
+        type: {
+          type: String,
+          enum: ['Point'],
+          default: 'Point',
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number,
+      },
+    ],
   },
   {
     toJSON: { virtuals: true }, // for displaying the virtual proberty when it output as a json
