@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const User = require('./userModel');
 
 //Schema
 const tourSchema = new mongoose.Schema(
@@ -108,6 +109,7 @@ const tourSchema = new mongoose.Schema(
         day: Number,
       },
     ],
+    guides: Array,
   },
   {
     toJSON: { virtuals: true }, // for displaying the virtual proberty when it output as a json
@@ -120,10 +122,18 @@ tourSchema.virtual('duarationWeeks').get(function () {
 });
 
 // DOCUMENT MIDDLEWARE :the pre middleware it run before saving .save(() and  .create() .
+
 //there is  another middleware (post) that runs after the save
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next(); // it is a middleware so it must have next function or it will be stuck in here
+});
+
+tourSchema.pre('save', async function (next) {
+  const guidesPromises = this.guides.map(async (id) => await User.findById(id));
+  // we use promise.all here because guidesPromises is an array so isted of loop over it and await each promise we use promise.all
+  this.guides = await Promise.all(guidesPromises);
+  next();
 });
 
 //QUERY MIDDLEWARE
