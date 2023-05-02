@@ -109,7 +109,7 @@ const tourSchema = new mongoose.Schema(
         day: Number,
       },
     ],
-    guides: Array,
+    guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
   },
   {
     toJSON: { virtuals: true }, // for displaying the virtual proberty when it output as a json
@@ -129,12 +129,12 @@ tourSchema.pre('save', function (next) {
   next(); // it is a middleware so it must have next function or it will be stuck in here
 });
 
-tourSchema.pre('save', async function (next) {
-  const guidesPromises = this.guides.map(async (id) => await User.findById(id));
-  // we use promise.all here because guidesPromises is an array so isted of loop over it and await each promise we use promise.all
-  this.guides = await Promise.all(guidesPromises);
-  next();
-});
+// tourSchema.pre('save', async function (next) {
+//   const guidesPromises = this.guides.map(async (id) => await User.findById(id));
+//   // we use promise.all here because guidesPromises is an array so isted of loop over it and await each promise we use promise.all
+//   this.guides = await Promise.all(guidesPromises);
+//   next();
+// });
 
 //QUERY MIDDLEWARE
 tourSchema.pre('/^find/', function (next) {
