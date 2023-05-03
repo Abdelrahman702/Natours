@@ -33,16 +33,18 @@ const reviewSchema = new mongoose.Schema(
     },
   },
   {
-    toJSON: { virtuals: true }, // for displaying the virtual proberty when it output as a json
-    toObject: { virtuals: true }, // for displaying the virtual proberty when it output as an object
+    toJSON: { virtuals: true, versionKey: false, minimize: false },
+    toObject: { virtuals: true, versionKey: false, minimize: false },
   }
 );
 
 reviewSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: 'tour',
-    select: 'name',
-  }).populate({ path: 'user', select: 'name photo' });
+  // this.populate({
+  //   path: 'tour',
+  //   select: 'name',
+  // }).populate({ path: 'user', select: 'name photo' });
+
+  this.populate({ path: 'user', select: 'name photo' });
 
   next();
 });

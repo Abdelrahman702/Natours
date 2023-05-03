@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 const User = require('./userModel');
+const Review = require('./reviewModel');
 
 //Schema
 const tourSchema = new mongoose.Schema(
@@ -112,13 +113,21 @@ const tourSchema = new mongoose.Schema(
     guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
   },
   {
-    toJSON: { virtuals: true }, // for displaying the virtual proberty when it output as a json
-    toObject: { virtuals: true }, // for displaying the virtual proberty when it output as an object
+    toJSON: { virtuals: true, versionKey: false, minimize: false },
+    toObject: { virtuals: true, versionKey: false, minimize: false },
   }
 );
 
 tourSchema.virtual('duarationWeeks').get(function () {
   return this.duration / 7;
+});
+
+// virtual populate
+
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour', // te name of the field in the review document
+  localField: '_id', // the name of the field in the tour document
 });
 
 // DOCUMENT MIDDLEWARE :the pre middleware it run before saving .save(() and  .create() .
@@ -145,7 +154,7 @@ tourSchema.pre(/^find/, function (next) {
 tourSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'guides',
-    select: '-passwordChangedAt -__v',
+    select: ' -__v -passwordChangedAt',
   });
 
   next();
