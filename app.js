@@ -11,6 +11,7 @@ const globalErrorHandler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
+const reviewRouter = require('./routes/reviewRoutes');
 
 const app = express();
 
@@ -74,6 +75,7 @@ app.use((req, res, next) => {
 
 app.use('/api/v1/tours', tourRouter); //use tourRouter to point to this url
 app.use('/api/v1/users', userRouter); //use userouter to point to this url
+app.use('/api/v1/reviews', reviewRouter);
 
 // handling unhandled reoutes
 

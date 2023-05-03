@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('./userModel');
-const Tour = require('./tourModel');
+const Tour = require('./tourModels');
 
 //Schema
 const reviewSchema = new mongoose.Schema(
@@ -20,20 +20,17 @@ const reviewSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
-    tour: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Tour',
-        required: [true, 'Review must belong to a tour!'],
-      },
-    ],
-    user: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-        required: [true, 'Review must belong to a user!'],
-      },
-    ],
+    tour: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Tour',
+      required: [true, 'Review must belong to a tour!'],
+    },
+
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: [true, 'Review must belong to a user!'],
+    },
   },
   {
     toJSON: { virtuals: true }, // for displaying the virtual proberty when it output as a json
