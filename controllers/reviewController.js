@@ -16,20 +16,15 @@ exports.getAllReviews = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.creareReview = catchAsync(async (req, res, next) => {
+exports.setTourUserIds = (req, res, next) => {
   //Allow nasted Routes
   if (!req.body.tour) req.body.tour = req.params.tourId;
   if (!req.body.user) req.body.user = req.user.id;
 
-  const newReview = await Review.create(req.body);
+  next();
+};
 
-  res.status(201).json({
-    status: 'success',
-    data: {
-      Review: newReview,
-    },
-  });
-});
+exports.creareReview = factory.createOne(Review);
 
 exports.deleteReview = factory.deleteOne(Review);
 exports.updateReview = factory.updateOne(Review);
