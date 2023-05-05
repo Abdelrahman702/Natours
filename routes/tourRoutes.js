@@ -2,11 +2,12 @@ const express = require('express');
 const tourController = require('./../controllers/tourContoroller');
 const router = express.Router();
 const authController = require('./../controllers/authController');
-const reviewController = require('./../controllers/reviewController');
-
+const reviewRouter = require('./../routes/reviewRoutes');
 //param middleware for getting the value of id parameter
 //it runs only for tours
 // router.param('id', tourController.checkID);
+
+router.use('/:tourId/reviews', reviewRouter);
 
 router
   .route('/top-5-cheap')
@@ -30,11 +31,12 @@ router
     tourController.deleteTour
   );
 
-router
-  .route('/:tourId/reviews')
-  .post(
-    authController.protect,
-    authController.restrictTo('user'),
-    reviewController.creareReview
-  );
+// router
+//   .route('/:tourId/reviews')
+//   .post(
+//     authController.protect,
+//     authController.restrictTo('user'),
+//     reviewController.creareReview
+//   );
+
 module.exports = router; // this is to allow to export the content of this file

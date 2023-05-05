@@ -2,7 +2,9 @@ const express = require('express');
 const reviewController = require('./../controllers/reviewController');
 const authController = require('./../controllers/authController');
 
-const router = express.Router();
+// mergeParams : is to allow child routes to access params from parent routes
+// all of there will be available in req.params
+const router = express.Router({ mergeParams: true });
 
 router
   .route('/')
