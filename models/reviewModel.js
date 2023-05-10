@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const User = require('./userModel');
+// const User = require('./userModel');
 const Tour = require('./tourModels');
 
 //Schema
@@ -47,6 +47,32 @@ reviewSchema.pre(/^find/, function (next) {
   this.populate({ path: 'user', select: 'name photo' });
 
   next();
+});
+
+// Statistics function is available in the model
+
+reviewSchema.statics.calcAverageRatings = async function (tourId) {
+  // this here points to the model not to the document
+  const stats = await this.aggregate([
+    { $match: { tour: tourId } },
+    {
+      $group: {
+        _id: '$tour',
+        nRating: { $sum: 1 },
+        avgRating: { $avg: '$rating' },
+      },
+    },
+  ]);
+  console.log(stats);
+  const data = {
+    ratingsQuantity: stats[0].nRating,
+    ratingsAverage: stats[0].avgRating,
+  };
+  await Tour.findByIdAndUpdate(tourId, data);
+};
+
+reviewSchema.post('save', function () {
+  this.constructor.calcAverageRatings(this.tour);
 });
 
 const Review = mongoose.model('Review', reviewSchema);
