@@ -169,10 +169,10 @@ tourSchema.pre(/^find/, function (next) {
 
 //AGGREGATION MIDDLEWARE
 
-tourSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  next(); // it is a middleware so it must have next function or it will be stuck in here
-});
+// tourSchema.pre('aggregate', function (next) {
+//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+//   next(); // it is a middleware so it must have next function or it will be stuck in here
+// });
 
 //Model of the schema
 
