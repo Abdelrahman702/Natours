@@ -80,7 +80,7 @@ app.use((req, res, next) => {
 // 2) ROUTE HANDELERS
 
 app.get('/', (req, res) => {
-  res.status(200).render('base', { tour: 'Forest Hiker', user: 'Abdelrahman' });
+  res.status(200).render('base');
 });
 
 app.use('/api/v1/tours', tourRouter); //use tourRouter to point to this url
