@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const fs = require('fs');
 const morgan = require('morgan'); // it show the information about the request
@@ -15,6 +16,11 @@ const reviewRouter = require('./routes/reviewRoutes');
 
 const app = express();
 
+// by using express.static we basicly define that all the static assets will be always be served from  a folder called (puplic)
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 // 1) MIDDLEWARES
 
 //Prevent parameter pollution
@@ -72,6 +78,10 @@ app.use((req, res, next) => {
 });
 
 // 2) ROUTE HANDELERS
+
+app.get('/', (req, res) => {
+  res.status(200).render('base', { tour: 'Forest Hiker', user: 'Abdelrahman' });
+});
 
 app.use('/api/v1/tours', tourRouter); //use tourRouter to point to this url
 app.use('/api/v1/users', userRouter); //use userouter to point to this url
